@@ -34,6 +34,36 @@ void ShakerSort<T>::Sort(Sequence<T>* seq, int (*cmp)(T, T))  {
 }
 
 template<class T>
+void HeapSort<T>::siftDown(Sequence<T>* seq, int root, int bottom, int (*cmp)(T, T))  {
+    int maxChild;
+    int done = 0;
+    while ((2 * root <= bottom) && (!done)) {
+        if (2 * root == bottom) maxChild = 2 * root;
+        else if (cmp(seq->Get(2 * root), seq->Get(2 * root + 1)) == 1) maxChild = 2 * root;
+        else maxChild = 2 * root + 1;
+        if (cmp(seq->Get(maxChild), seq->Get(root)) == 1) {
+            T tmp = seq->Get(root);
+            seq->Set(root, seq->Get(maxChild));
+            seq->Set(maxChild, tmp);
+            root = maxChild;
+        }
+        else done = 1;
+    }
+}
+
+template<class T>
+void HeapSort<T>::Sort(Sequence<T>* seq, int (*cmp)(T, T))  {
+    for (int i = seq->GetLength() / 2; i >= 0; --i)
+        siftDown(seq, i, seq->GetLength() - 1, cmp);
+    for (int i = seq->GetLength() - 1; i >= 1; --i) {
+        T tmp = seq->Get(0);
+        seq->Set(0, seq->Get(i));
+        seq->Set(i, tmp);
+        siftDown(seq, 0, i - 1, cmp);
+    }
+}
+
+template<class T>
 void QuickSort<T>::Sort_first(Sequence<T>* seq, int left, int right, int (*cmp)(T, T))  {
     T pivot;
     int l_hold = left;
@@ -62,36 +92,6 @@ void QuickSort<T>::Sort_first(Sequence<T>* seq, int left, int right, int (*cmp)(
 template<class T>
 void QuickSort<T>::Sort(Sequence<T>* seq, int (*cmp)(T, T))  {
     Sort_first(seq, 0, seq->GetLength() - 1, cmp);
-}
-
-template<class T>
-void HeapSort<T>::siftDown(Sequence<T>* seq, int root, int bottom, int (*cmp)(T, T))  {
-    int maxChild;
-    int done = 0;
-    while ((2 * root <= bottom) && (!done)) {
-        if (2 * root == bottom) maxChild = 2 * root;
-        else if (cmp(seq->Get(2 * root), seq->Get(2 * root + 1)) == 1) maxChild = 2 * root;
-        else maxChild = 2 * root + 1;
-        if (cmp(seq->Get(maxChild), seq->Get(root)) == 1) {
-            T tmp = seq->Get(root);
-            seq->Set(root, seq->Get(maxChild));
-            seq->Set(maxChild, tmp);
-            root = maxChild;
-        }
-        else done = 1;
-    }
-}
-
-template<class T>
-void HeapSort<T>::Sort(Sequence<T>* seq, int (*cmp)(T, T))  {
-    for (int i = seq->GetLength() / 2; i >= 0; --i)
-        siftDown(seq, i, seq->GetLength() - 1, cmp);
-    for (int i = seq->GetLength() - 1; i >= 1; --i) {
-        T tmp = seq->Get(0);
-        seq->Set(0, seq->Get(i));
-        seq->Set(i, tmp);
-        siftDown(seq, 0, i - 1, cmp);
-    }
 }
 
 template<class T>
