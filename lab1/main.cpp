@@ -86,7 +86,6 @@ int main() {
 
             auto time = std::chrono::duration_cast<std::chrono::microseconds>(t_2 - t_1).count();
             cout << "Time: " << time << " microseconds" << endl << endl;
-            //cout << isSorted(seq, cmp) << endl << endl;
         }
         if (*choice4 == 2){ //Quick
             QuickSort<int> Sorter;
